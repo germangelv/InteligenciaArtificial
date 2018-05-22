@@ -1,0 +1,104 @@
+#############################################
+#	Grupo Watson							#
+#											#
+#	GALASSO, Agustina						#
+#	LORENZ VIETA, Germán					#
+#	MANSILLA, Rodrigo						#
+#	OÑA, Diego								#
+#############################################
+
+define
+
+#Entidades
+
+cultivo sub entity
+	plays plantacion
+	has idCultivo
+	has name
+	has ph_min
+	has ph_max
+	has nitrogeno_cultivo
+	has fosforo_cultivo
+	has potasio_cultivo;
+
+suelo sub entity
+	plays muestra
+	has idMuestra
+	has conductividad_electrica
+	has nivel_materia_organica
+	has nivel_ph
+	has nitrogeno_suelo
+	has fosforo_suelo
+	has potasio_suelo	
+	has textura;
+	
+fertilizante sub entity
+	plays agregar_nitrogeno
+	plays agregar_potasio
+	plays agregar_fosforo
+	plays no_agregar_nitrogeno
+	plays no_agregar_fosforo
+	has tipo_fertilizante
+	has cantidad_fertilizante;
+	
+#Atributos
+
+	idCultivo 				sub attribute datatype long;
+	name 					sub attribute datatype string;
+	ph_min 					sub attribute datatype double;
+	ph_max 					sub attribute datatype double;
+	nitrogeno_cultivo 		sub attribute datatype double;
+	fosforo_cultivo 		sub attribute datatype double;
+	potasio_cultivo 		sub attribute datatype double;
+	idMuestra 				sub attribute datatype long;
+	textura 				sub attribute datatype double;
+	nivel_ph 				sub attribute datatype double;
+	conductividad_electrica sub attribute datatype double;
+	nivel_materia_organica 	sub attribute datatype double;
+	nitrogeno_suelo 		sub attribute datatype double;
+	fosforo_suelo 			sub attribute datatype double;
+	potasio_suelo 			sub attribute datatype double;
+	tipo_fertilizante 		sub attribute datatype string;
+	cantidad_fertilizante 	sub attribute datatype double;
+	
+#Relaciones
+
+es_suelo_contaminado sub relationship
+	relates muestra;
+	
+es_suelo_no_contaminado sub relationship
+	relates muestra;
+
+es_cultivo_apto sub relationship
+	relates plantacion
+	relates muestra;
+
+es_cultivo_no_apto sub relationship
+	relates plantacion
+	relates muestra;
+	
+fosforo_agregar_muestra sub relationship
+	relates plantacion
+	relates agregar_fosforo
+	relates muestra;
+
+fosforo_suficiente_muestra sub relationship
+	relates plantacion
+	relates no_agregar_fosforo
+	relates muestra;
+
+nitrogeno_agregar_muestra sub relationship
+	relates plantacion
+	relates agregar_nitrogeno
+	relates muestra;
+	
+nitrogeno_suficiente_muestra sub relationship
+	relates plantacion
+	relates no_agregar_nitrogeno
+	relates muestra;
+	
+potasio_agregar_muestra sub relationship
+	relates plantacion
+	relates agregar_potasio
+	relates muestra;
+

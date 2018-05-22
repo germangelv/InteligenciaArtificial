@@ -1,0 +1,14 @@
+#############################################
+#	Grupo Watson							#
+#											#
+#	GALASSO, Agustina						#
+#	LORENZ VIETA, Germán					#
+#	MANSILLA, Rodrigo						#
+#	OÑA, Diego								#
+#											#
+#	Referencia en web Grakn					#
+#############################################
+
+match $x isa name; offset 0; limit 30; get;
+match $x isa cultivo; offset 0; limit 30; get;
+match $x isa es_cultivo_apto; offset 0; limit 30; get;
