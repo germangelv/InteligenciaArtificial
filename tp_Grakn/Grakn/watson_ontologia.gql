@@ -31,7 +31,15 @@ suelo sub entity
 	has fosforo_suelo
 	has potasio_suelo	
 	has textura;
+
+valor_aptitud sub entity
+	plays rol_muestra_apta
+	plays rol_muestra_no_apta;
+
+muestra_apta sub valor_aptitud;
 	
+muestra_no_apta sub valor_aptitud;
+
 fertilizante sub entity
 	plays agregar_nitrogeno
 	plays agregar_potasio
@@ -57,26 +65,29 @@ fertilizante sub entity
 	nivel_materia_organica 	sub attribute datatype double;
 	nitrogeno_suelo 		sub attribute datatype double;
 	fosforo_suelo 			sub attribute datatype double;
+	fosforo_suelo 			sub attribute datatype double;
 	potasio_suelo 			sub attribute datatype double;
 	tipo_fertilizante 		sub attribute datatype string;
 	cantidad_fertilizante 	sub attribute datatype double;
 	
 #Relaciones
 
-es_suelo_contaminado sub relationship
-	relates muestra;
-	
-es_suelo_no_contaminado sub relationship
-	relates muestra;
+es_muestra_apta sub relationship
+	relates muestra
+	relates rol_muestra_apta;
 
-es_cultivo_apto sub relationship
+es_muestra_no_apta sub relationship
+	relates muestra
+	relates rol_muestra_no_apta;
+
+es_cultivo_compatible sub relationship
 	relates plantacion
 	relates muestra;
 
-es_cultivo_no_apto sub relationship
+es_cultivo_no_compatible sub relationship
 	relates plantacion
 	relates muestra;
-	
+
 fosforo_agregar_muestra sub relationship
 	relates plantacion
 	relates agregar_fosforo
@@ -102,3 +113,7 @@ potasio_agregar_muestra sub relationship
 	relates agregar_potasio
 	relates muestra;
 
+
+
+insert $apta isa muestra_apta;
+insert $no_apta isa muestra_no_apta;

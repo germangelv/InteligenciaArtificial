@@ -11,43 +11,40 @@ define
 
 #Reglas
 
-#R1 - Resultado de muestra es contaminado
-	R1_es_suelo_contaminado sub rule
+#R1 - Resultado de muestra es no apta
+	R1_es_muestra_no_apta sub rule
 	when
 	{
 		$unaMuestra isa suelo 
 			has nivel_ph 				$nivel_ph 
 			has conductividad_electrica $conductividad_electrica;
-		$nivel_ph val < 6.5;
-		$conductividad_electrica val > 4;
+		$nivel_ph val <= 5.5;
+		$conductividad_electrica val > 4.0;
+		$no_apta isa muestra_no_apta;
 	}
 	then
 	{
-		(	
-			muestra:$unaMuestra
-		)	isa es_suelo_contaminado;
+		(muestra:$unaMuestra,rol_muestra_no_apta:$no_apta) isa es_muestra_no_apta;
 	};
 
-#R2 - Resultado de muestra es no contaminado
-	R2_es_suelo_no_contaminado sub rule
+#R2 - Resultado de muestra es no apta
+	R2_es_muestra_apta sub rule
 	when
 	{
 		$unaMuestra isa suelo 
 			has nivel_ph 				$nivel_ph 
 			has conductividad_electrica $conductividad_electrica;
-		$nivel_ph val >= 6.5;
-		$conductividad_electrica val <= 4;
+		$nivel_ph val > 5.5;
+		$conductividad_electrica val <= 4.0;
+		$apta isa muestra_apta;
 	}
 	then
 	{
-		(	
-			muestra:$unaMuestra
-		)	isa es_suelo_no_contaminado;
+		(muestra:$unaMuestra, rol_muestra_apta:$apta) isa es_muestra_apta;
 	};
-
 
 #R3 - Resultado de cultivo es compatible
-	R3_es_cultivo_apto sub rule
+	R3_es_cultivo_compatible sub rule
 	when
 	{
 		$unaMuestra isa suelo 
@@ -56,19 +53,16 @@ define
 			has ph_min $ph_min 
 			has ph_max $ph_max;
 		$nivel_ph val >= $ph_min;
-		$nivel_ph val <= $ph_max;	
-
+		$nivel_ph val <= $ph_max;
+		(muestra:$unaMuestra, rol_muestra_apta:$apta) isa es_muestra_apta;
 	}
 	then
 	{
-		(	
-			plantacion:$unCultivo,
-			muestra:$unaMuestra
-		)	isa es_cultivo_apto;
+		(plantacion:$unCultivo, muestra:$unaMuestra) isa es_cultivo_compatible;
 	};
 
 #R4 - Resultado de cultivo es no compatible
-	R4_es_cultivo_no_apto sub rule
+	R4_es_cultivo_no_compatible sub rule
 	when
 	{
 		$unaMuestra isa suelo 
@@ -78,14 +72,11 @@ define
 			has ph_max $ph_max;
 		$nivel_ph val < $ph_min;
 		$nivel_ph val > $ph_max;	
-
+		(muestra:$unaMuestra,rol_muestra_no_apta:$no_apta) isa es_muestra_no_apta;
 	}
 	then
 	{
-		(	
-			plantacion:$unCultivo,
-			muestra:$unaMuestra
-		)	isa es_cultivo_no_apto;
+		(plantacion:$unCultivo, muestra:$unaMuestra) isa es_cultivo_no_compatible;
 	};
 
 #R5 - Resultado de fosforo agregar
@@ -100,10 +91,7 @@ define
 	}
 	then
 	{
-		(	
-			plantacion:$unCultivo,
-			muestra:$unaMuestra
-		)	isa fosforo_agregar_muestra;
+		(plantacion:$unCultivo,muestra:$unaMuestra) isa fosforo_agregar_muestra;
 	};
 
 
@@ -119,10 +107,7 @@ define
 	}
 	then
 	{
-		(	
-			plantacion:$unCultivo,
-			muestra:$unaMuestra
-		)	isa fosforo_suficiente_muestra;
+		(plantacion:$unCultivo, muestra:$unaMuestra) isa fosforo_suficiente_muestra;
 	};
 
 
@@ -138,10 +123,7 @@ define
 	}
 	then
 	{
-		(	
-			plantacion:$unCultivo,
-			muestra:$unaMuestra
-		)	isa nitrogeno_agregar_muestra;
+		(plantacion:$unCultivo, muestra:$unaMuestra)isa nitrogeno_agregar_muestra;
 	};
 
 #R8 - Resultado de nitrogeno no agregar
@@ -156,14 +138,9 @@ define
 	}
 	then
 	{
-		(	
-			plantacion:$unCultivo,
-			muestra:$unaMuestra
-		)	isa nitrogeno_suficiente_muestra;
+		(plantacion:$unCultivo, muestra:$unaMuestra) isa nitrogeno_suficiente_muestra;
 	};
 
 #R9 - Resultado de potasio arenoso agregar
 #R10 - Resultado de potasio franco agregar
 #R11 - Resultado de potasio arcilloso agregar
-
-
